@@ -7,4 +7,6 @@ urlpatterns = [
     url(r'^attribute/$', views.AttributeList.as_view()),
 
     url(r'^profile/$', views.ProfileList.as_view()),
+
+    url(r'^attributeByProfile/(?P<pk>.+)/$', views.AttributeByProfile.as_view()),
 ]
