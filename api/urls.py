@@ -9,6 +9,5 @@ urlpatterns = [
     url(r'^profile/$', views.ProfileList.as_view()),
     url(r'^user/$', views.UserList.as_view()),
 
-]
-    url(r'^attributeByProfile/(?P<pk>.+)/$', views.AttributeByProfile.as_view()),
+    url(r'^attribute/(?P<pk>.+)/$', views.AttributeByProfile.as_view()),
 ]
