@@ -41,3 +41,39 @@ class AttributeList(generics.ListCreateAPIView):
         - form
         """
         return self.list(request)
+
+
+class ProfileList(generics.ListCreateAPIView):
+    """ <b>Profile list</b>"""
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    allowed_methods = ['get']
+    #pagination_class = GeoJsonPagination
+
+    #def finalize_response(self, request, *args, **kwargs):
+    #    response = super(ResourceList, self).finalize_response(request, *args, **kwargs)
+    #    response['last_object_update'] = getListLastUpdate(self.get_queryset())
+    #    return response
+
+    def get(self, request):
+        """
+        Gets every Profiles
+
+
+
+
+        <b>Details</b>
+
+        METHODS : GET
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        ---
+        omit_parameters:
+        - form
+        """
+        return self.list(request)
