@@ -43,7 +43,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'core',
-
+    'api',
+    'custom_users',
 
 )
 
@@ -134,3 +135,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 100
 }
+
+
+# use this user model instead of the django one
+
+AUTH_USER_MODEL = 'custom_users.CustomUser'

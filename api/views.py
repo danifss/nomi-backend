@@ -1,11 +1,44 @@
-from django.shortcuts import render
-from rest_framework.response import Response
-from rest_framework import status
-import django.utils.translation as t
-import math
 from rest_framework import generics
 from core.models import Attribute, Profile
 from core.serializers import AttributeSerializer, ProfileSerializer
+from custom_users.models import CustomUser
+from custom_users.serializers import CustomUserSerializer
+
+class UserList(generics.ListCreateAPIView):
+    """<b>User List</b>"""
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+    allowed_methods = ['get']
+    #pagination_class = GeoJsonPagination
+
+    #def finalize_response(self, request, *args, **kwargs):
+    #    response = super(ResourceList, self).finalize_response(request, *args, **kwargs)
+    #    response['last_object_update'] = getListLastUpdate(self.get_queryset())
+    #    return response
+
+    def get(self, request):
+        """
+        Gets every User
+
+
+
+
+        <b>Details</b>
+
+        METHODS : GET
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        ---
+        omit_parameters:
+        - form
+        """
+        return self.list(request)
+
 
 class AttributeList(generics.ListCreateAPIView):
     """<b>Attribute List</b>"""

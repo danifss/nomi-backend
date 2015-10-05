@@ -28,10 +28,11 @@ class LeftMenu(Menu):
         user = context.get('request').user
 
         self.children += [
-            items.ModelList(
-                    title=_('Utilizadores e grupos'),
-                    icon='fa-user',
-                    models=('django.contrib.auth.*', 'myusers.*'),
+            items.MenuItem(
+                    title=_('Users'),
+                    url=reverse('admin:custom_users_customuser_changelist'),
+                    enabled=user.has_perm('custom_users.change_customuser'),
+                    icon='fa-user'
             ),
             items.MenuItem(
                     title=_('Profiles'),

@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from custom_users.models import CustomUser
 
 ATTRS = (
     ('FACEBOOK', 'Facebook'),
@@ -19,7 +19,7 @@ class Attribute(models.Model):
 
 class Profile(models.Model):
     name = models.CharField(max_length=20)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(CustomUser)
     connections = models.ManyToManyField('Profile', blank=True)
     attributes = models.ManyToManyField(Attribute, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
