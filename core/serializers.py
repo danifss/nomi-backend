@@ -8,6 +8,7 @@ class AttributeSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     user = CustomUserSerializer()
+    attributes = AttributeSerializer(many=True)
 
     class Meta:
         model = Profile
