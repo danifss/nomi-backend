@@ -108,3 +108,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# wpadmin settings
+
+WPADMIN = {
+    'admin': {
+        'title': 'nomi',
+        'menu': {
+            'left': 'nomi.wp.LeftMenu',
+        },
+        'dashboard': {
+            'breadcrumbs': True,
+        },
+        'custom_style': STATIC_URL + 'wpadmin/css/themes/light.css',
+    }
+}
