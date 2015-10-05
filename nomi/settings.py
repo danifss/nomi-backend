@@ -32,6 +32,8 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = (
     # wpadmin must be before django.contrib.admin
     'wpadmin',
+    'rest_framework',
+    'rest_framework_swagger',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -123,4 +125,12 @@ WPADMIN = {
         },
         'custom_style': STATIC_URL + 'wpadmin/css/themes/light.css',
     }
+}
+
+
+# restframework pagination settings
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 100
 }
