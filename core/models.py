@@ -8,6 +8,15 @@ ATTRS = (
 )
 
 
+COLORS = (
+    ('RED', 'Red'),
+    ('BLUE', 'Blue'),
+    ('GREEN', 'Green'),
+    ('WHITE', 'White'),
+    ('BLACK', 'Black'),
+)
+
+
 class Attribute(models.Model):
     name = models.CharField(max_length=20, choices=ATTRS)
     value = models.CharField(max_length=100)
@@ -20,6 +29,7 @@ class Attribute(models.Model):
 class Profile(models.Model):
     name = models.CharField(max_length=20)
     user = models.ForeignKey(CustomUser)
+    color = models.CharField(max_length=20, choices=COLORS)
     connections = models.ManyToManyField('Profile', blank=True)
     attributes = models.ManyToManyField(Attribute, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
