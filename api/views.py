@@ -3,6 +3,9 @@ from core.models import Attribute, Profile
 from core.serializers import AttributeSerializer, ProfileSerializer
 from custom_users.models import CustomUser
 from custom_users.serializers import CustomUserSerializer
+from core.models import COLORS
+from httplib import HTTPResponse
+
 
 class UserList(generics.ListCreateAPIView):
     """<b>User List</b>"""
@@ -39,6 +42,7 @@ class UserList(generics.ListCreateAPIView):
         """
         return self.list(request)
 
+
 class AttributeList(generics.ListCreateAPIView):
     """<b>Attribute List</b>"""
     queryset = Attribute.objects.all()
@@ -73,6 +77,7 @@ class AttributeList(generics.ListCreateAPIView):
         - form
         """
         return self.list(request)
+
 
 class ProfileList(generics.ListCreateAPIView):
     """ <b>Profile list</b>"""
@@ -191,3 +196,40 @@ class Relations(generics.ListCreateAPIView):
         except:
             self.queryset = []
         return self.list(request)
+
+class Colors(generics.ListCreateAPIView):
+    """ <b>Colors</b> """
+    queryset = COLORS
+    serializer_class = ProfileSerializer
+    allowed_methods = ['get']
+    #pagination_class = GeoJsonPagination
+
+    #def finalize_response(self, request, *args, **kwargs):
+    #    response = super(ResourceList, self).finalize_response(request, *args, **kwargs)
+    #    response['last_object_update'] = getListLastUpdate(self.get_queryset())
+    #    return response
+
+    def get(self, request):
+        """
+        Gets every Colors
+
+
+
+
+        <b>Details</b>
+
+        METHODS : GET
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        ---
+        omit_parameters:
+        - form
+        """
+        # return self.list(COLORS)
+        return HTTPResponse(query_set)
+        # return self.list("BLUE","Blue")
