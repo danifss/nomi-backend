@@ -39,6 +39,89 @@ class UserList(generics.ListCreateAPIView):
         """
         return self.list(request)
 
+class UserDetails(generics.ListCreateAPIView):
+    """<b>User</b>"""
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+    allowed_methods = ['get']
+    #pagination_class = GeoJsonPagination
+
+    #def finalize_response(self, request, *args, **kwargs):
+    #    response = super(ResourceList, self).finalize_response(request, *args, **kwargs)
+    #    response['last_object_update'] = getListLastUpdate(self.get_queryset())
+    #    return response
+
+    def get(self, request, pk=None):
+        """
+        Gets User with specified id
+
+
+
+
+        <b>Details</b>
+
+        METHODS : GET
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        ---
+        omit_parameters:
+        - form
+        """
+        try:
+            int_pk = int(pk)
+            self.queryset = self.queryset.filter(pk=int_pk)
+        except:
+            self.queryset = []
+        return self.list(request)
+
+
+class UserByProfile(generics.ListCreateAPIView):
+    """<b>User</b>"""
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+    allowed_methods = ['get']
+    #pagination_class = GeoJsonPagination
+
+    #def finalize_response(self, request, *args, **kwargs):
+    #    response = super(ResourceList, self).finalize_response(request, *args, **kwargs)
+    #    response['last_object_update'] = getListLastUpdate(self.get_queryset())
+    #    return response
+
+    def get(self, request, pk=None):
+        """
+        Gets User which the given profile belongs to
+
+
+
+
+        <b>Details</b>
+
+        METHODS : GET
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        ---
+        omit_parameters:
+        - form
+        """
+        try:
+            int_pk = int(pk)
+            profile = Profile.objects.get(pk=int_pk)
+            self.queryset = self.queryset.filter(pk=profile.user.id)
+        except:
+            self.queryset = []
+        return self.list(request)
+
+
 class AttributeList(generics.ListCreateAPIView):
     """<b>Attribute List</b>"""
     queryset = Attribute.objects.all()
@@ -150,6 +233,48 @@ class AttributeByProfile(generics.ListCreateAPIView):
             self.queryset = []
         return self.list(request)
 
+
+class AttributeDetails(generics.ListCreateAPIView):
+    """ <b>Attribute Details</b> """
+    queryset = Attribute.objects.all()
+    serializer_class = AttributeSerializer
+    allowed_methods = ['get']
+    #pagination_class = GeoJsonPagination
+
+    #def finalize_response(self, request, *args, **kwargs):
+    #    response = super(ResourceList, self).finalize_response(request, *args, **kwargs)
+    #    response['last_object_update'] = getListLastUpdate(self.get_queryset())
+    #    return response
+
+    def get(self, request, pk=None):
+        """
+        Gets Attribute by given id
+
+
+
+
+        <b>Details</b>
+
+        METHODS : GET
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        ---
+        omit_parameters:
+        - form
+        """
+        try:
+            int_pk = int(pk)
+            self.queryset = self.queryset.filter(pk=int_pk)
+        except:
+            self.queryset = []
+        return self.list(request)
+
+
 class Relations(generics.ListCreateAPIView):
     """ <b>Relations by Profile</b> """
     queryset = Profile.objects.all()
@@ -188,6 +313,91 @@ class Relations(generics.ListCreateAPIView):
             int_pk = int(pk)
             profile = Profile.objects.get(pk = int_pk)
             self.queryset = profile.connections.all()
+        except:
+            self.queryset = []
+        return self.list(request)
+
+
+class UserProfileList(generics.ListCreateAPIView):
+    """ <b>Profiles for user</b> """
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    allowed_methods = ['get']
+    #pagination_class = GeoJsonPagination
+
+    #def finalize_response(self, request, *args, **kwargs):
+    #    response = super(ResourceList, self).finalize_response(request, *args, **kwargs)
+    #    response['last_object_update'] = getListLastUpdate(self.get_queryset())
+    #    return response
+
+    def get(self, request, pk=None):
+        """
+        Gets every Profile of a given user
+
+
+
+
+        <b>Details</b>
+
+        METHODS : GET
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        ---
+        omit_parameters:
+        - form
+        """
+
+        try:
+            int_pk = int(pk)
+            user = CustomUser.objects.get(pk = int_pk)
+            self.queryset = self.queryset.filter(user=user)
+        except:
+            self.queryset = []
+        return self.list(request)
+
+
+class ProfileDetails(generics.ListCreateAPIView):
+    """ <b>Profiles for user</b> """
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    allowed_methods = ['get']
+    #pagination_class = GeoJsonPagination
+
+    #def finalize_response(self, request, *args, **kwargs):
+    #    response = super(ResourceList, self).finalize_response(request, *args, **kwargs)
+    #    response['last_object_update'] = getListLastUpdate(self.get_queryset())
+    #    return response
+
+    def get(self, request, pk=None):
+        """
+        Gets Profile for given id
+
+
+
+
+        <b>Details</b>
+
+        METHODS : GET
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        ---
+        omit_parameters:
+        - form
+        """
+
+        try:
+            int_pk = int(pk)
+            self.queryset = self.queryset.filter(pk=int_pk)
         except:
             self.queryset = []
         return self.list(request)
