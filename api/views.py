@@ -8,6 +8,7 @@ from httplib import HTTPResponse
 from rest_framework.response import Response
 from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
+import json
 
 
 class UserList(generics.ListCreateAPIView):
@@ -48,14 +49,34 @@ class UserList(generics.ListCreateAPIView):
     @csrf_exempt
     def post(self, request):
         """
-        Gets every User
+        Creates a User
 
 
 
 
         <b>Details</b>
 
-        METHODS : GET
+        METHODS : POST
+
+
+
+
+        <b>Example:</b>
+
+
+        {
+
+            "email": "123qwe@gmail.com",
+
+            "username": "123qwe",
+
+            "password": "123qwe",
+
+            "first_name": "Ivo",
+
+            "last_name": "Silva"
+
+        }
 
 
 
@@ -70,20 +91,37 @@ class UserList(generics.ListCreateAPIView):
             - form
         """
 
+        # passwords are sent in clear text
+        # in need of ssl or to send already hashed passwords
+
         #{
         #    "email": "ivopintodasilva@gmail.com",
         #    "username": "swag",
-        #    "password": "123qwe"
+        #    "password": "123qwe",
+        #    "first_name": "Ivo",
+        #    "last_name": "Silva"
         #}
 
         #X-CSRFToken: vp9PVkKgRzj8900v62TBN3ZkxMauXnHD
 
-        print request.data
+        #print request.META
 
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-        return Response('swag')
+        if 'password' in request.data and 'username' in request.data \
+                and 'first_name' in request.data and 'last_name' in request.data \
+                and 'email' in request.data:
+            password = request.data['password']
+            username = request.data['username']
+
+            request.data['is_active'] = True
+
+            serializer = self.serializer_class(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                user = CustomUser.objects.get(username=username)
+                user.set_password(password)
+                user.save()
+                return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserDetails(generics.ListCreateAPIView):
