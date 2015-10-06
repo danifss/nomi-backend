@@ -1,6 +1,6 @@
 from rest_framework import generics
 from core.models import Attribute, Profile, ATTRS
-from core.serializers import AttributeSerializer, ProfileSerializer
+from core.serializers import AttributeSerializer, ProfileSerializer, RelationSerializer
 from custom_users.models import CustomUser
 from custom_users.serializers import CustomUserSerializer
 from core.models import COLORS
@@ -286,7 +286,7 @@ class AttributeDetails(generics.ListCreateAPIView):
 class Relations(generics.ListCreateAPIView):
     """ <b>Relations by Profile</b> """
     queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
+    serializer_class = RelationSerializer
     allowed_methods = ['get']
     #pagination_class = GeoJsonPagination
 

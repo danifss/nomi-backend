@@ -12,3 +12,11 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
+
+class RelationSerializer(serializers.ModelSerializer):
+    user = CustomUserSerializer()
+    attributes = AttributeSerializer(many=True)
+
+    class Meta:
+        model = Profile
+        exclude = ("connections",)
