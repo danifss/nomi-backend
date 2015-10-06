@@ -422,7 +422,7 @@ class Relations(generics.ListCreateAPIView):
     """ <b>Relations by Profile</b> """
     queryset = Profile.objects.all()
     serializer_class = RelationSerializer
-    allowed_methods = ['get']
+    allowed_methods = ['get','post']
     #pagination_class = GeoJsonPagination
 
     #def finalize_response(self, request, *args, **kwargs):
@@ -459,6 +459,77 @@ class Relations(generics.ListCreateAPIView):
         except:
             self.queryset = []
         return self.list(request)
+
+
+class MakeRelation(generics.ListCreateAPIView):
+    """ <b>Relation between profiles</b> """
+    queryset = Profile.objects.all()
+    serializer_class = RelationSerializer
+    allowed_methods = ['put']
+    #pagination_class = GeoJsonPagination
+
+    #def finalize_response(self, request, *args, **kwargs):
+    #    response = super(ResourceList, self).finalize_response(request, *args, **kwargs)
+    #    response['last_object_update'] = getListLastUpdate(self.get_queryset())
+    #    return response
+
+    @csrf_exempt
+    def put(self, request):
+        """
+        Creates a Relation between two profiles
+
+
+
+
+        <b>Details</b>
+
+        METHODS : PUT
+
+
+
+
+        <b>Example:</b>
+
+
+        {
+
+            "profileId1": 1,
+
+            "profileId2": 3
+
+        }
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+
+
+        ---
+        omit_parameters:
+            - form
+        """
+
+        #X-CSRFToken: vp9PVkKgRzj8900v62TBN3ZkxMauXnHD
+
+        # print 'X-CSRFToken: '+request.META["CSRF_COOKIE"]
+        # print request.data
+
+        if 'profileId1' in request.data and 'profileId2' in request.data \
+                and request.data['profileId1'] != request.data['profileId2']:
+            try:
+                profile1 = Profile.objects.get(pk=request.data['profileId1'])
+                profile2 = Profile.objects.get(pk=request.data['profileId2'])
+
+                profile1.connections.add(profile2)
+                profile2.connections.add(profile1)
+
+                return Response(status=status.HTTP_200_OK)
+            except:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserProfileList(generics.ListCreateAPIView):
