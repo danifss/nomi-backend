@@ -207,40 +207,11 @@ class UserByProfile(generics.ListCreateAPIView):
         return self.list(request)
 
 
-class AttributeList(generics.ListCreateAPIView):
+class AttributePost(generics.ListCreateAPIView):
     """<b>Attribute List</b>"""
     queryset = Attribute.objects.all()
     serializer_class = AttributeSerializer
-    allowed_methods = ['get', 'post']
-    #pagination_class = GeoJsonPagination
-
-    #def finalize_response(self, request, *args, **kwargs):
-    #    response = super(ResourceList, self).finalize_response(request, *args, **kwargs)
-    #    response['last_object_update'] = getListLastUpdate(self.get_queryset())
-    #    return response
-
-    def get(self, request):
-        """
-        Gets every Attribute
-
-
-
-
-        <b>Details</b>
-
-        METHODS : GET
-
-
-
-        <b>RETURNS:</b>
-
-        - 200 OK.
-
-        ---
-        omit_parameters:
-        - form
-        """
-        return self.list(request)
+    allowed_methods = ['post']
 
     @csrf_exempt
     def post(self, request):
@@ -300,6 +271,43 @@ class AttributeList(generics.ListCreateAPIView):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
+
+class AttributeList(generics.ListCreateAPIView):
+    """<b>Attribute List</b>"""
+    queryset = Attribute.objects.all()
+    serializer_class = AttributeSerializer
+    allowed_methods = ['get']
+    #pagination_class = GeoJsonPagination
+
+    #def finalize_response(self, request, *args, **kwargs):
+    #    response = super(ResourceList, self).finalize_response(request, *args, **kwargs)
+    #    response['last_object_update'] = getListLastUpdate(self.get_queryset())
+    #    return response
+
+    def get(self, request):
+        """
+        Gets every Attribute
+
+
+
+
+        <b>Details</b>
+
+        METHODS : GET
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        ---
+        omit_parameters:
+        - form
+        """
+        return self.list(request)
+
+
 class ProfileList(generics.ListCreateAPIView):
     """ <b>Profile list</b>"""
     queryset = Profile.objects.all()
@@ -334,6 +342,72 @@ class ProfileList(generics.ListCreateAPIView):
         - form
         """
         return self.list(request)
+
+
+class ProfilePost(generics.ListCreateAPIView):
+    """ <b>Profile Post</b>"""
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    allowed_methods = ['post']
+
+    @csrf_exempt
+    def post(self, request):
+        """
+        Creates a Profile and adds to user
+
+
+
+
+        <b>Details</b>
+
+        METHODS : POST
+
+
+
+
+        <b>Example:</b>
+
+
+        {
+
+            "name": "Pessoal",
+
+            "user": 1,
+
+            "color": "RED"
+
+        }
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+
+
+        ---
+        omit_parameters:
+            - form
+        """
+
+
+        #X-CSRFToken: vp9PVkKgRzj8900v62TBN3ZkxMauXnHD
+
+        #print request.META
+        try:
+            if 'name' in request.data and 'user' in request.data \
+                    and 'color' in request.data:
+
+                Profile.objects.create(
+                    name=request.data['name'],
+                    user=CustomUser.objects.get(pk=request.data['user']),
+                    color=request.data['color']
+                )
+                return Response(status=status.HTTP_200_OK)
+
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class AttributeByProfile(generics.ListCreateAPIView):
