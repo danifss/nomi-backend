@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^profile/(?P<pk>[0-9]+)$', views.ProfileDetails.as_view()),
     url(r'^profile/user/$', views.ProfilePost.as_view()),
     url(r'^profile/user/(?P<pk>[0-9]+)$', views.UserProfileList.as_view()),
+    url(r'^profile/relation/$', views.MakeRelation.as_view()),
     url(r'^profile/relation/(?P<pk>[0-9]+)/$', views.Relations.as_view()),
     url(r'^user/$', views.UserList.as_view()),
     url(r'^user/(?P<pk>[0-9]+)/$', views.UserDetails.as_view()),
