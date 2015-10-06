@@ -14,5 +14,6 @@ urlpatterns = [
     url(r'^user/$', views.UserList.as_view()),
     url(r'^user/(?P<pk>[0-9+])/$', views.UserDetails.as_view()),
     url(r'^user/profile/(?P<pk>[0-9+])/$', views.UserByProfile.as_view()),
+    url(r'^possible-attributes/$', views.ProfilePossibleAttributes.as_view()),
 
 ]

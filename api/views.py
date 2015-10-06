@@ -1,8 +1,11 @@
 from rest_framework import generics
-from core.models import Attribute, Profile
+from core.models import Attribute, Profile, ATTRS
 from core.serializers import AttributeSerializer, ProfileSerializer
 from custom_users.models import CustomUser
 from custom_users.serializers import CustomUserSerializer
+from rest_framework.response import Response
+from rest_framework import status
+
 
 class UserList(generics.ListCreateAPIView):
     """<b>User List</b>"""
@@ -38,6 +41,7 @@ class UserList(generics.ListCreateAPIView):
         - form
         """
         return self.list(request)
+
 
 class UserDetails(generics.ListCreateAPIView):
     """<b>User</b>"""
@@ -157,6 +161,7 @@ class AttributeList(generics.ListCreateAPIView):
         """
         return self.list(request)
 
+
 class ProfileList(generics.ListCreateAPIView):
     """ <b>Profile list</b>"""
     queryset = Profile.objects.all()
@@ -191,6 +196,7 @@ class ProfileList(generics.ListCreateAPIView):
         - form
         """
         return self.list(request)
+
 
 class AttributeByProfile(generics.ListCreateAPIView):
     """ <b>Attribute List by Profile</b> """
@@ -401,3 +407,42 @@ class ProfileDetails(generics.ListCreateAPIView):
         except:
             self.queryset = []
         return self.list(request)
+
+
+class ProfilePossibleAttributes(generics.ListCreateAPIView):
+    """<b>Possible Attributes List</b>"""
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+    allowed_methods = ['get']
+    #pagination_class = GeoJsonPagination
+
+    #def finalize_response(self, request, *args, **kwargs):
+    #    response = super(ResourceList, self).finalize_response(request, *args, **kwargs)
+    #    response['last_object_update'] = getListLastUpdate(self.get_queryset())
+    #    return response
+
+    def get(self, request):
+        """
+        Gets every possible attribute for user to insert into his profile
+
+
+
+
+        <b>Details</b>
+
+        METHODS : GET
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        ---
+        omit_parameters:
+        - form
+        """
+        resp = {}
+        for a in ATTRS:
+            resp[a[0]] = a[1]
+        return Response(resp, status=status.HTTP_200_OK)
