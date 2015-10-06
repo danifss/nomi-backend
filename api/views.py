@@ -211,7 +211,7 @@ class AttributeList(generics.ListCreateAPIView):
     """<b>Attribute List</b>"""
     queryset = Attribute.objects.all()
     serializer_class = AttributeSerializer
-    allowed_methods = ['get']
+    allowed_methods = ['get', 'post']
     #pagination_class = GeoJsonPagination
 
     #def finalize_response(self, request, *args, **kwargs):
@@ -241,6 +241,63 @@ class AttributeList(generics.ListCreateAPIView):
         - form
         """
         return self.list(request)
+
+    @csrf_exempt
+    def post(self, request):
+        """
+        Creates an Attribute and adds to profile
+
+
+
+
+        <b>Details</b>
+
+        METHODS : POST
+
+
+
+
+        <b>Example:</b>
+
+
+        {
+
+            "name": "FACEBOOK",
+
+            "value": "123qwe",
+
+            "profile": 1
+
+        }
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+
+
+        ---
+        omit_parameters:
+            - form
+        """
+
+
+        #X-CSRFToken: vp9PVkKgRzj8900v62TBN3ZkxMauXnHD
+
+        #print request.META
+
+        if 'name' in request.data and 'value' in request.data \
+                and 'profile' in request.data:
+            profile_pk = request.data['profile']
+            serializer = self.serializer_class(data=request.data)
+            if serializer.is_valid():
+                obj = serializer.save()
+                profile = Profile.objects.get(pk=profile_pk)
+                profile.attributes.add(obj)
+                return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProfileList(generics.ListCreateAPIView):
