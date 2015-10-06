@@ -20,3 +20,4 @@ class RelationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         exclude = ("connections",)
+

@@ -1,9 +1,8 @@
 from rest_framework import generics
-from core.models import Attribute, Profile, ATTRS
+from core.models import Attribute, Profile, ATTRS, COLORS
 from core.serializers import AttributeSerializer, ProfileSerializer, RelationSerializer
 from custom_users.models import CustomUser
 from custom_users.serializers import CustomUserSerializer
-from core.models import COLORS
 from httplib import HTTPResponse
 from rest_framework.response import Response
 from rest_framework import status
@@ -526,6 +525,46 @@ class ProfilePossibleAttributes(generics.ListCreateAPIView):
         """
         resp = {}
         for a in ATTRS:
+            resp[a[0]] = a[1]
+        return Response(resp, status=status.HTTP_200_OK)
+        return self.list(request)
+
+class ColorsAttributes(generics.ListCreateAPIView):
+    """<b>Possible Colors List</b>"""
+    queryset = []
+    # gives an error if it doesn't have a serializer class defined
+    serializer_class = ProfileSerializer
+    allowed_methods = ['get']
+    #pagination_class = GeoJsonPagination
+
+    #def finalize_response(self, request, *args, **kwargs):
+    #    response = super(ResourceList, self).finalize_response(request, *args, **kwargs)
+    #    response['last_object_update'] = getListLastUpdate(self.get_queryset())
+    #    return response
+
+    def get(self, request):
+        """
+        Gets every possible colors for profiles
+
+
+
+
+        <b>Details</b>
+
+        METHODS : GET
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        ---
+        omit_parameters:
+        - form
+        """
+        resp = {}
+        for a in COLORS:
             resp[a[0]] = a[1]
         return Response(resp, status=status.HTTP_200_OK)
         return self.list(request)
