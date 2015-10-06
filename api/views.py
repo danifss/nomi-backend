@@ -39,7 +39,6 @@ class UserList(generics.ListCreateAPIView):
         """
         return self.list(request)
 
-
 class AttributeList(generics.ListCreateAPIView):
     """<b>Attribute List</b>"""
     queryset = Attribute.objects.all()
@@ -74,7 +73,6 @@ class AttributeList(generics.ListCreateAPIView):
         - form
         """
         return self.list(request)
-
 
 class ProfileList(generics.ListCreateAPIView):
     """ <b>Profile list</b>"""
@@ -148,6 +146,48 @@ class AttributeByProfile(generics.ListCreateAPIView):
             int_pk = int(pk)
             profile = Profile.objects.get(pk = int_pk)
             self.queryset = Attribute.objects.filter(profile=profile)
+        except:
+            self.queryset = []
+        return self.list(request)
+
+class Relations(generics.ListCreateAPIView):
+    """ <b>Relations by Profile</b> """
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    allowed_methods = ['get']
+    #pagination_class = GeoJsonPagination
+
+    #def finalize_response(self, request, *args, **kwargs):
+    #    response = super(ResourceList, self).finalize_response(request, *args, **kwargs)
+    #    response['last_object_update'] = getListLastUpdate(self.get_queryset())
+    #    return response
+
+    def get(self, request, pk=None):
+        """
+        Gets every Connections by Profile
+
+
+
+
+        <b>Details</b>
+
+        METHODS : GET
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        ---
+        omit_parameters:
+        - form
+        """
+
+        try:
+            int_pk = int(pk)
+            profile = Profile.objects.get(pk = int_pk)
+            self.queryset = profile.connections.all()
         except:
             self.queryset = []
         return self.list(request)
