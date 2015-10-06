@@ -5,13 +5,14 @@ from custom_users.models import CustomUser
 from custom_users.serializers import CustomUserSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from django.views.decorators.csrf import csrf_exempt
 
 
 class UserList(generics.ListCreateAPIView):
     """<b>User List</b>"""
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
-    allowed_methods = ['get']
+    allowed_methods = ['get', 'post']
     #pagination_class = GeoJsonPagination
 
     #def finalize_response(self, request, *args, **kwargs):
@@ -41,6 +42,46 @@ class UserList(generics.ListCreateAPIView):
         - form
         """
         return self.list(request)
+
+    @csrf_exempt
+    def post(self, request):
+        """
+        Gets every User
+
+
+
+
+        <b>Details</b>
+
+        METHODS : GET
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+
+
+        ---
+        omit_parameters:
+            - form
+        """
+
+        #{
+        #    "email": "ivopintodasilva@gmail.com",
+        #    "username": "swag",
+        #    "password": "123qwe"
+        #}
+
+        #X-CSRFToken: vp9PVkKgRzj8900v62TBN3ZkxMauXnHD
+
+        print request.data
+
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response('swag')
 
 
 class UserDetails(generics.ListCreateAPIView):
@@ -412,7 +453,8 @@ class ProfileDetails(generics.ListCreateAPIView):
 class ProfilePossibleAttributes(generics.ListCreateAPIView):
     """<b>Possible Attributes List</b>"""
     queryset = []
-    serializer_class = None
+    # gives an error if it doesn't have a serializer class defined
+    serializer_class = ProfileSerializer
     allowed_methods = ['get']
     #pagination_class = GeoJsonPagination
 
