@@ -1,8 +1,10 @@
 from rest_framework import generics
 from core.models import Attribute, Profile, ATTRS
-from core.serializers import AttributeSerializer, ProfileSerializer
+from core.serializers import AttributeSerializer, ProfileSerializer, RelationSerializer
 from custom_users.models import CustomUser
 from custom_users.serializers import CustomUserSerializer
+from core.models import COLORS
+from httplib import HTTPResponse
 from rest_framework.response import Response
 from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
@@ -325,7 +327,7 @@ class AttributeDetails(generics.ListCreateAPIView):
 class Relations(generics.ListCreateAPIView):
     """ <b>Relations by Profile</b> """
     queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
+    serializer_class = RelationSerializer
     allowed_methods = ['get']
     #pagination_class = GeoJsonPagination
 
@@ -488,3 +490,4 @@ class ProfilePossibleAttributes(generics.ListCreateAPIView):
         for a in ATTRS:
             resp[a[0]] = a[1]
         return Response(resp, status=status.HTTP_200_OK)
+        return self.list(request)
