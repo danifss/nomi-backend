@@ -127,7 +127,7 @@ class UserDetails(generics.ListCreateAPIView):
     """<b>User</b>"""
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
-    allowed_methods = ['get']
+    allowed_methods = ['get', 'delete']
     #pagination_class = GeoJsonPagination
 
     #def finalize_response(self, request, *args, **kwargs):
@@ -162,6 +162,37 @@ class UserDetails(generics.ListCreateAPIView):
         except:
             self.queryset = []
         return self.list(request)
+
+    def delete(self, request, pk=None):
+        """
+        Delete User with specified id
+
+
+
+
+        <b>Details</b>
+
+        METHODS : DELETE
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        - 404 NOU FOUND.
+
+        ---
+        omit_parameters:
+        - form
+        """
+        try:
+            int_pk = int(pk)
+            self.queryset = self.queryset.get(pk=int_pk).delete()
+            return Response(status=status.HTTP_200_OK)
+        except:
+            pass
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class UserByProfile(generics.ListCreateAPIView):
@@ -268,7 +299,6 @@ class AttributePost(generics.ListCreateAPIView):
                 profile.attributes.add(obj)
                 return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class AttributeList(generics.ListCreateAPIView):
@@ -413,7 +443,7 @@ class AttributeByProfile(generics.ListCreateAPIView):
     """ <b>Attribute List by Profile</b> """
     queryset = Attribute.objects.all()
     serializer_class = AttributeSerializer
-    allowed_methods = ['get']
+    allowed_methods = ['get', 'delete']
     #pagination_class = GeoJsonPagination
 
     #def finalize_response(self, request, *args, **kwargs):
@@ -450,12 +480,44 @@ class AttributeByProfile(generics.ListCreateAPIView):
             self.queryset = []
         return self.list(request)
 
+    def delete(self, request, pk=None):
+        """
+        Deletes every Attribute from Profile
+
+
+
+
+        <b>Details</b>
+
+        METHODS : GET
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        - 400 NOT FOUND.
+
+        ---
+        omit_parameters:
+        - form
+        """
+        try:
+            int_pk = int(pk)
+            profile = Profile.objects.get(pk = int_pk)
+            self.queryset = Attribute.objects.filter(profile=profile).delete()
+            return Response(status=status.HTTP_200_OK)
+        except:
+            pass
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
 
 class AttributeDetails(generics.ListCreateAPIView):
     """ <b>Attribute Details</b> """
     queryset = Attribute.objects.all()
     serializer_class = AttributeSerializer
-    allowed_methods = ['get']
+    allowed_methods = ['get', 'delete']
     #pagination_class = GeoJsonPagination
 
     #def finalize_response(self, request, *args, **kwargs):
@@ -491,12 +553,43 @@ class AttributeDetails(generics.ListCreateAPIView):
             self.queryset = []
         return self.list(request)
 
+    def delete(self, request, pk=None):
+        """
+        Delete Attribute by given id
+
+
+
+
+        <b>Details</b>
+
+        METHODS : DELETE
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        - 404 NOT FOUND.
+
+        ---
+        omit_parameters:
+        - form
+        """
+        try:
+            int_pk = int(pk)
+            self.queryset = self.queryset.get(pk=int_pk).delete()
+            return Response(status=status.HTTP_200_OK)
+        except:
+            pass
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
 
 class Relations(generics.ListCreateAPIView):
     """ <b>Relations by Profile</b> """
     queryset = Profile.objects.all()
     serializer_class = RelationSerializer
-    allowed_methods = ['get','post']
+    allowed_methods = ['get']
     #pagination_class = GeoJsonPagination
 
     #def finalize_response(self, request, *args, **kwargs):
@@ -539,7 +632,7 @@ class MakeRelation(generics.ListCreateAPIView):
     """ <b>Relation between profiles</b> """
     queryset = Profile.objects.all()
     serializer_class = RelationSerializer
-    allowed_methods = ['put']
+    allowed_methods = ['put', 'delete']
     #pagination_class = GeoJsonPagination
 
     #def finalize_response(self, request, *args, **kwargs):
@@ -605,12 +698,76 @@ class MakeRelation(generics.ListCreateAPIView):
                 return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+    @csrf_exempt
+    def delete(self, request):
+        """
+        Delete a Relation between two profiles
+
+
+
+
+        <b>Details</b>
+
+        METHODS : DELETE
+
+
+
+
+        <b>Example:</b>
+
+
+        {
+
+            "profileId1": 1,
+
+            "profileId2": 3
+
+        }
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        - 404 NOT FOUND.
+
+
+
+        ---
+        omit_parameters:
+            - form
+        """
+
+        #X-CSRFToken: vp9PVkKgRzj8900v62TBN3ZkxMauXnHD
+
+        # print 'X-CSRFToken: '+request.META["CSRF_COOKIE"]
+        # print request.META
+
+        if 'profileId1' in request.data and 'profileId2' in request.data \
+                and request.data['profileId1'] != request.data['profileId2']:
+            try:
+                profile1 = Profile.objects.get(pk=request.data['profileId1'])
+                profile2 = Profile.objects.get(pk=request.data['profileId2'])
+
+                if profile1 not in profile2.connections.all() or \
+                        profile2 not in profile1.connections.all():
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+                profile1.connections.remove(profile2)
+                profile2.connections.remove(profile1)
+
+                return Response(status=status.HTTP_200_OK)
+            except:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
 
 class UserProfileList(generics.ListCreateAPIView):
     """ <b>Profiles for user</b> """
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-    allowed_methods = ['get']
+    allowed_methods = ['get', 'delete']
     #pagination_class = GeoJsonPagination
 
     #def finalize_response(self, request, *args, **kwargs):
@@ -648,12 +805,45 @@ class UserProfileList(generics.ListCreateAPIView):
             self.queryset = []
         return self.list(request)
 
+    def delete(self, request, pk=None):
+        """
+        Deletes every Profile of a given user
+
+
+
+
+        <b>Details</b>
+
+        METHODS : DELETE
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        - 404 NOT FOUND.
+
+        ---
+        omit_parameters:
+        - form
+        """
+
+        try:
+            int_pk = int(pk)
+            user = CustomUser.objects.get(pk = int_pk)
+            self.queryset = self.queryset.get(user=user).delete()
+            return Response(status=status.HTTP_200_OK)
+        except:
+            pass
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
 
 class ProfileDetails(generics.ListCreateAPIView):
     """ <b>Profiles for user</b> """
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-    allowed_methods = ['get']
+    allowed_methods = ['get', 'delete']
     #pagination_class = GeoJsonPagination
 
     #def finalize_response(self, request, *args, **kwargs):
@@ -689,6 +879,38 @@ class ProfileDetails(generics.ListCreateAPIView):
         except:
             self.queryset = []
         return self.list(request)
+
+    def delete(self, request, pk=None):
+        """
+        Deletes Profile for given id
+
+
+
+
+        <b>Details</b>
+
+        METHODS : DELETE
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        - 400 NOT FOUND.
+
+        ---
+        omit_parameters:
+        - form
+        """
+
+        try:
+            int_pk = int(pk)
+            self.queryset = self.queryset.get(pk=int_pk).delete()
+            return Response(status=status.HTTP_200_OK)
+        except:
+            pass
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class ProfilePossibleAttributes(generics.ListCreateAPIView):
@@ -730,6 +952,7 @@ class ProfilePossibleAttributes(generics.ListCreateAPIView):
             resp[a[0]] = a[1]
         return Response(resp, status=status.HTTP_200_OK)
         return self.list(request)
+
 
 class ColorsAttributes(generics.ListCreateAPIView):
     """<b>Possible Colors List</b>"""
