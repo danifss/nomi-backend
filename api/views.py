@@ -127,7 +127,7 @@ class UserDetails(generics.ListCreateAPIView):
     """<b>User</b>"""
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
-    allowed_methods = ['get', 'delete']
+    allowed_methods = ['get', 'delete', 'put']
     #pagination_class = GeoJsonPagination
 
     #def finalize_response(self, request, *args, **kwargs):
@@ -193,6 +193,85 @@ class UserDetails(generics.ListCreateAPIView):
         except:
             pass
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+    @csrf_exempt
+    def put(self, request, pk=None):
+        """
+        Edits a User
+
+
+
+
+        <b>Details</b>
+
+        METHODS : PUT
+
+
+
+
+        <b>Example:</b>
+
+
+        {
+
+            "email": "123qwe@gmail.com",
+
+            "password": "123qwe",
+
+            "first_name": "Ivo",
+
+            "last_name": "Silva"
+
+        }
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        - 404 BAD REQUEST.
+
+
+
+        ---
+        omit_parameters:
+            - form
+        """
+
+        # passwords are sent in clear text
+        # in need of ssl or to send already hashed passwords
+
+        #{
+        #    "email": "ivopintodasilva@gmail.com",
+        #    "password": "123qwe",
+        #    "first_name": "Ivo",
+        #    "last_name": "Silva"
+        #}
+
+        #X-CSRFToken: vp9PVkKgRzj8900v62TBN3ZkxMauXnHD
+
+        #print request.META
+
+        try:
+            int_pk = int(pk)
+            user = self.queryset.get(pk=int_pk)
+
+
+            if 'password' in request.data:
+                user.set_password(request.data['password'])
+            if 'email' in request.data:
+                user.email = request.data['email']
+            if 'first_name' in request.data:
+                user.first_name = request.data['first_name']
+            if 'last_name' in request.data:
+                user.last_name = request.data['last_name']
+            user.save()
+
+            return Response(status=status.HTTP_200_OK)
+        except:
+            pass
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserByProfile(generics.ListCreateAPIView):
@@ -517,7 +596,7 @@ class AttributeDetails(generics.ListCreateAPIView):
     """ <b>Attribute Details</b> """
     queryset = Attribute.objects.all()
     serializer_class = AttributeSerializer
-    allowed_methods = ['get', 'delete']
+    allowed_methods = ['get', 'delete', 'put']
     #pagination_class = GeoJsonPagination
 
     #def finalize_response(self, request, *args, **kwargs):
@@ -583,6 +662,67 @@ class AttributeDetails(generics.ListCreateAPIView):
         except:
             pass
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+    @csrf_exempt
+    def put(self, request, pk=None):
+        """
+        Edits an Attribute
+
+
+
+
+        <b>Details</b>
+
+        METHODS : PUT
+
+
+
+
+        <b>Example:</b>
+
+
+        {
+
+            "name": "FACEBOOK",
+
+            "value": "facebook.com/daniel"
+
+
+        }
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        - 404 BAD REQUEST.
+
+
+
+        ---
+        omit_parameters:
+            - form
+        """
+
+        #X-CSRFToken: vp9PVkKgRzj8900v62TBN3ZkxMauXnHD
+
+        #print request.META
+
+        try:
+            int_pk = int(pk)
+            attribute = self.queryset.get(pk=int_pk)
+
+            if 'name' in request.data:
+                attribute.name = request.data['name']
+            if 'value' in request.data:
+                attribute.value = request.data['value']
+            attribute.save()
+
+            return Response(status=status.HTTP_200_OK)
+        except:
+            pass
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class Relations(generics.ListCreateAPIView):
@@ -843,7 +983,7 @@ class ProfileDetails(generics.ListCreateAPIView):
     """ <b>Profiles for user</b> """
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-    allowed_methods = ['get', 'delete']
+    allowed_methods = ['get', 'delete', 'put']
     #pagination_class = GeoJsonPagination
 
     #def finalize_response(self, request, *args, **kwargs):
@@ -911,6 +1051,67 @@ class ProfileDetails(generics.ListCreateAPIView):
         except:
             pass
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+    @csrf_exempt
+    def put(self, request, pk=None):
+        """
+        Edits a Profile
+
+
+
+
+        <b>Details</b>
+
+        METHODS : PUT
+
+
+
+
+        <b>Example:</b>
+
+
+        {
+
+            "name": "Pessoal",
+
+            "color": "RED"
+
+
+        }
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        - 404 BAD REQUEST.
+
+
+
+        ---
+        omit_parameters:
+            - form
+        """
+
+        #X-CSRFToken: vp9PVkKgRzj8900v62TBN3ZkxMauXnHD
+
+        #print request.META
+
+        try:
+            int_pk = int(pk)
+            profile = self.queryset.get(pk=int_pk)
+
+            if 'name' in request.data:
+                profile.name = request.data['name']
+            if 'color' in request.data:
+                profile.color = request.data['color']
+            profile.save()
+
+            return Response(status=status.HTTP_200_OK)
+        except:
+            pass
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProfilePossibleAttributes(generics.ListCreateAPIView):
