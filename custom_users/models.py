@@ -8,3 +8,6 @@ class CustomUser(AbstractUser):
     class Meta:
         verbose_name = _("user")
         verbose_name_plural = _("users")
+
+        class Meta:
+            unique_together = ('email',)
