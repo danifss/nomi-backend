@@ -138,7 +138,6 @@ class UserList(generics.ListCreateAPIView):
 
         #{
         #    "email": "ivopintodasilva@gmail.com",
-        #    "username": "swag",
         #    "password": "123qwe",
         #    "first_name": "Ivo",
         #    "last_name": "Silva"
@@ -148,11 +147,11 @@ class UserList(generics.ListCreateAPIView):
 
         #print request.META
 
-        if 'password' in request.data and 'username' in request.data \
+        if 'password' in request.data\
                 and 'first_name' in request.data and 'last_name' in request.data \
                 and 'email' in request.data:
             password = request.data['password']
-            username = request.data['username']
+            username = request.data['email']
 
             request.data['is_active'] = True
 
