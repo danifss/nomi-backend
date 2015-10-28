@@ -148,19 +148,36 @@ class UserList(generics.ListCreateAPIView):
         if 'password' in request.data\
                 and 'first_name' in request.data and 'last_name' in request.data \
                 and 'email' in request.data:
-            password = request.data['password']
-            username = request.data['email']
+            #password = request.data['password']
+            request.data['username'] = str(CustomUser.objects.latest('id').id + 1)
+            #username = request.data['username']
 
             request.data['is_active'] = True
+            print request.data
 
-            serializer = self.serializer_class(data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                user = CustomUser.objects.get(username=username)
-                user.set_password(password)
-                user.save()
-                return Response(status=status.HTTP_200_OK)
+            #serializer = self.serializer_class(data=request.data)
+            #if serializer.is_valid():
+            #    serializer.save()
+            #    user = CustomUser.objects.get(username=username)
+            #    user.set_password(password)
+            #    user.save()
+            #    return Response(status=status.HTTP_200_OK)
+            #print 'serializer not valid'
+
+            try:
+                CustomUser.objects.get(email = str(request.data['email']))
+                return Response(status=status.HTTP_401_UNAUTHORIZED, data='Email is already registered.')
+            except:
+                try:
+                    new_user = CustomUser.objects.create(username=str(request.data['username']), email = str(request.data['email']), first_name = request.data['first_name'], last_name = request.data['last_name'])
+                    new_user.set_password(str(request.data['password']))
+                    new_user.save()
+                    return Response(status=status.HTTP_200_OK, data={'id': new_user.id})
+                except:
+                    pass
+
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class UserDetails(generics.ListCreateAPIView):
