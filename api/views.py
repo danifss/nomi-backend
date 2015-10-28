@@ -45,7 +45,8 @@ class UserLogin(generics.ListCreateAPIView):
             try:
                 user = CustomUser.objects.get(email__iexact = request.GET.get('email'))
                 if user.check_password(request.GET.get('password')):
-                    return Response(status=status.HTTP_200_OK, data={'id': user.id})
+                    return Response(status=status.HTTP_200_OK, data={'id': user.id, 'first_name': user.first_name,
+                                                                     'last_name': user.last_name})
                 else:
                     return Response(status=status.HTTP_400_BAD_REQUEST)
             except:
