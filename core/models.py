@@ -3,8 +3,12 @@ from custom_users.models import CustomUser
 
 ATTRS = (
     ('FACEBOOK', 'Facebook'),
-    ('PHONE', 'Phone number'),
+    ('NUMBER', 'Phone number'),
     ('INSTAGRAM', 'Instagram'),
+    ('EMAIL', 'E-mail'),
+    ('LINKEDIN', 'LinkedIn'),
+    ('GOOGLE', 'Google'),
+    ('TWITTER', 'Twitter'),
 )
 
 
