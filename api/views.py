@@ -180,7 +180,6 @@ class UserList(generics.ListCreateAPIView):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-
 class UserDetails(generics.ListCreateAPIView):
     """<b>User</b>"""
     queryset = CustomUser.objects.all()
@@ -821,6 +820,57 @@ class Relations(generics.ListCreateAPIView):
             int_pk = int(pk)
             profile = Profile.objects.get(pk = int_pk)
             self.queryset = profile.connections.all()
+        except:
+            self.queryset = []
+        return self.list(request)
+
+
+class RelationsByUser(generics.ListCreateAPIView):
+    """ <b>Relations by User</b> """
+    queryset = Profile.objects.all()
+    serializer_class = RelationSerializer
+    allowed_methods = ['get']
+    #pagination_class = GeoJsonPagination
+
+    #def finalize_response(self, request, *args, **kwargs):
+    #    response = super(ResourceList, self).finalize_response(request, *args, **kwargs)
+    #    response['last_object_update'] = getListLastUpdate(self.get_queryset())
+    #    return response
+
+    def get(self, request, pk=None):
+        """
+        Gets every Connections for a given user
+
+
+
+
+        <b>Details</b>
+
+        METHODS : GET
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        ---
+        omit_parameters:
+        - form
+        """
+
+        resp = []
+
+        try:
+            int_pk = int(pk)
+            user = CustomUser.objects.get(pk=int_pk)
+            user_profiles = Profile.objects.filter(user=user)
+            for p in user_profiles:
+                for connect in p.connections.all():
+                    if connect.user != user:
+                        print connect
+                        resp += [connect]
+            self.queryset = resp
         except:
             self.queryset = []
         return self.list(request)
