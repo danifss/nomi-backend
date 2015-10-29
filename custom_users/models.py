@@ -9,3 +9,6 @@ class CustomUser(AbstractUser):
         verbose_name = _("user")
         verbose_name_plural = _("users")
         unique_together = ('email',)
+
+    def __unicode__(self):
+        return self.email
