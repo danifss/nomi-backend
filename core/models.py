@@ -40,7 +40,7 @@ class Profile(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return u'{0} - {1}'.format(self.user, self.user)
+        return u'{0} - {1}'.format(self.user, self.name)
 
 # class ProfileAttribute(models.Model):
 #     profile = models.ForeignKey(Profile)
