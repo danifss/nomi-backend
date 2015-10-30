@@ -48,7 +48,7 @@ class CustomUserChangeForm(forms.ModelForm):
 class CustomUserAdmin(UserAdmin):
     form = CustomUserChangeForm
     add_form = CustomUserCreationForm
-    list_display = ('username',)
+    list_display = ('email',)
     filter_horizontal = ('groups', 'user_permissions')
     fieldsets = UserAdmin.fieldsets + (
             (None, {'fields': tuple()}),
