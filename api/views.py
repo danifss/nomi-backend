@@ -144,13 +144,18 @@ class UserList(generics.ListCreateAPIView):
 
         #X-CSRFToken: vp9PVkKgRzj8900v62TBN3ZkxMauXnHD
 
-        #print request.META
+        # print request.META
 
         if 'password' in request.data\
                 and 'first_name' in request.data and 'last_name' in request.data \
                 and 'email' in request.data:
             #password = request.data['password']
-            request.data['username'] = str(CustomUser.objects.latest('id').id + 1)
+            try:
+                latest_id = CustomUser.objects.latest('id').id + 1
+            except:
+                latest_id = 0
+
+            request.data['username'] = str(latest_id)
             #username = request.data['username']
 
             request.data['is_active'] = True
