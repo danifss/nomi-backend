@@ -937,6 +937,7 @@ class MakeRelation(generics.ListCreateAPIView):
         # print 'X-CSRFToken: '+request.META["CSRF_COOKIE"]
         # print request.data
 
+
         if 'profileId1' in request.data and 'profileId2' in request.data \
                 and request.data['profileId1'] != request.data['profileId2']:
             try:
@@ -946,7 +947,7 @@ class MakeRelation(generics.ListCreateAPIView):
                 profile1.connections.add(profile2)
                 profile2.connections.add(profile1)
 
-                return Response(status=status.HTTP_200_OK)
+                return Response(status=status.HTTP_200_OK, data=CustomUserSerializer(profile2.user).data)
             except:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_400_BAD_REQUEST)

@@ -39,4 +39,8 @@ class Migration(migrations.Migration):
                 ('objects', django.contrib.auth.models.UserManager()),
             ],
         ),
+        migrations.AlterUniqueTogether(
+            name='customuser',
+            unique_together=set([('email',)]),
+        ),
     ]
