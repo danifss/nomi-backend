@@ -2,13 +2,11 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-from django.conf import settings
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
@@ -16,7 +14,7 @@ class Migration(migrations.Migration):
             name='Attribute',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=20, choices=[(b'Facebook', b'FACEBOOK'), (b'Phone number', b'PHONE'), (b'Instagram', b'INSTAGRAM')])),
+                ('name', models.CharField(max_length=20, choices=[(b'FACEBOOK', b'Facebook'), (b'NUMBER', b'Phone number'), (b'INSTAGRAM', b'Instagram'), (b'EMAIL', b'E-mail'), (b'LINKEDIN', b'LinkedIn'), (b'GOOGLE', b'Google'), (b'TWITTER', b'Twitter')])),
                 ('value', models.CharField(max_length=100)),
                 ('created_on', models.DateTimeField(auto_now_add=True)),
                 ('updated_on', models.DateTimeField(auto_now=True)),
@@ -27,11 +25,11 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=20)),
+                ('color', models.CharField(max_length=20, choices=[(b'RED', b'Red'), (b'BLUE', b'Blue'), (b'GREEN', b'Green'), (b'WHITE', b'White'), (b'BLACK', b'Black')])),
                 ('created_on', models.DateTimeField(auto_now_add=True)),
                 ('updated_on', models.DateTimeField(auto_now=True)),
-                ('attributes', models.ManyToManyField(to='core.Attribute')),
+                ('attributes', models.ManyToManyField(to='core.Attribute', blank=True)),
                 ('connections', models.ManyToManyField(to='core.Profile', blank=True)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]

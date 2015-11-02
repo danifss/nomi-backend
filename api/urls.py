@@ -1,7 +1,11 @@
 from django.conf.urls import include, url
 from api import views
+from push_notifications.api.rest_framework import GCMDeviceAuthorizedViewSet
+
 
 urlpatterns = [
+    url(r'^device/gcm/?$', GCMDeviceAuthorizedViewSet.as_view({'post': 'create'}), name='create_gcm_device'),
+
     url(r'^docs/', include('rest_framework_swagger.urls')),
 
     url(r'^attribute/$', views.AttributeList.as_view()),

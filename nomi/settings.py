@@ -34,6 +34,7 @@ INSTALLED_APPS = (
     'wpadmin',
     'rest_framework',
     'rest_framework_swagger',
+    'push_notifications',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -140,3 +141,7 @@ REST_FRAMEWORK = {
 # use this user model instead of the django one
 
 AUTH_USER_MODEL = 'custom_users.CustomUser'
+
+PUSH_NOTIFICATIONS_SETTINGS = {
+        "GCM_API_KEY": "AIzaSyDoHrZT_qv3J1ZT2SrzNaMcBXfgsE-paYs",
+}
