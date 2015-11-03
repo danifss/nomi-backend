@@ -639,7 +639,7 @@ class AttributeByProfile(generics.ListCreateAPIView):
 
         {
 
-            "name": "FACEBOOK",
+            "name": "FACEBOOK"
 
         }
 
