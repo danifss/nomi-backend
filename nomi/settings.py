@@ -143,5 +143,5 @@ REST_FRAMEWORK = {
 AUTH_USER_MODEL = 'custom_users.CustomUser'
 
 PUSH_NOTIFICATIONS_SETTINGS = {
-        "GCM_API_KEY": "AIzaSyDoHrZT_qv3J1ZT2SrzNaMcBXfgsE-paYs",
+        "GCM_API_KEY": "AIzaSyBywIl3fuWY8kJXkkupR86Dqi_PfhOnRho",
 }

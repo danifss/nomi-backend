@@ -653,6 +653,69 @@ class AttributeByProfile(generics.ListCreateAPIView):
             pass
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+    @csrf_exempt
+    def put(self, request, pk=None):
+        """
+        Edits an Attribute of a given profile
+
+
+
+
+        <b>Details</b>
+
+        METHODS : PUT
+
+
+
+
+        <b>Example:</b>
+
+
+        {
+
+            "name": "FACEBOOK",
+
+            "value": "facebook.com/daniel"
+
+
+        }
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        - 404 BAD REQUEST.
+
+
+
+        ---
+        omit_parameters:
+            - form
+        """
+
+        #X-CSRFToken: vp9PVkKgRzj8900v62TBN3ZkxMauXnHD
+
+        #print request.META
+
+        try:
+            int_pk = int(pk)
+            profile = Profile.objects.get(pk=int_pk)
+            attributes = profile.attributes.all()
+
+            if 'name' in request.data and 'value' in request.data:
+                for attribute in attributes:
+                    if attribute.name == request.data['name']:
+                        attribute.value = request.data['value']
+                        attribute.save()
+                        return Response(status=status.HTTP_200_OK, data=AttributeSerializer(attribute).data)
+
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        except:
+            pass
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 class AttributeDetails(generics.ListCreateAPIView):
     """ <b>Attribute Details</b> """
