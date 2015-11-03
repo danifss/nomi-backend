@@ -439,6 +439,13 @@ class AttributePost(generics.ListCreateAPIView):
                 obj = serializer.save()
                 profile = Profile.objects.get(pk=profile_pk)
                 profile.attributes.add(obj)
+
+                users_to_notify = []
+                for p in profile.connections.all():
+                    users_to_notify += [p.user]
+                devices = GCMDevice.objects.all().filter(user__in=users_to_notify)
+                devices.send_message(ProfileSerializer(profile).data)
+
                 return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -737,7 +744,7 @@ class AttributeByProfile(generics.ListCreateAPIView):
                         for p in profile.connections.all():
                             users_to_notify += [p.user]
                         devices = GCMDevice.objects.all().filter(user__in=users_to_notify)
-                        devices.send_message("Ivo is the swag!")
+                        devices.send_message(ProfileSerializer(profile).data)
                         return Response(status=status.HTTP_200_OK, data=AttributeSerializer(attribute).data)
 
             return Response(status=status.HTTP_400_BAD_REQUEST)
