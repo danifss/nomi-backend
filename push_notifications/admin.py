@@ -70,7 +70,10 @@ class GCMDeviceAdmin(DeviceAdmin):
         if obj and obj != '':
             if connection.vendor in ("mysql", "sqlite"):
                 # return hex(obj.device_id).rstrip("L")
-                return hex(int(obj.device_id)).rstrip("L")
+                if hasattr('device_id', obj) and obj.device_id != '':
+                    return hex(int(obj.device_id)).rstrip("L")
+                else:
+                    return obj.device_id
             else:
                 return obj.device_id
 
