@@ -8,6 +8,8 @@ from rest_framework.fields import IntegerField
 from push_notifications.models import APNSDevice, GCMDevice
 from push_notifications.fields import hex_re
 
+from custom_users.models import CustomUser
+
 
 # Fields
 
@@ -68,8 +70,11 @@ class DeviceViewSetMixin(object):
 
     def perform_create(self, serializer):
         #if self.request.user.is_authenticated():
-        serializer.save(user=self.request.user)
-
+        print self.request.data
+        try:
+            serializer.save(user=CustomUser.objects.get(pk=int(self.request.data['user'])))
+        except:
+            serializer.save()
 
 class AuthorizedMixin(object):
     permission_classes = (permissions.IsAuthenticated, IsOwner)
