@@ -641,9 +641,6 @@ class AttributeByProfile(generics.ListCreateAPIView):
 
             "name": "FACEBOOK",
 
-            "value": "facebook.com/daniel"
-
-
         }
 
 
@@ -665,7 +662,7 @@ class AttributeByProfile(generics.ListCreateAPIView):
             profile = Profile.objects.get(pk=int_pk)
             attributes = profile.attributes.all()
 
-            if 'name' in request.data and 'value' in request.data:
+            if 'name' in request.data:
                 for attribute in attributes:
                     if attribute.name == request.data['name']:
                         profile.attributes.remove(attribute)
