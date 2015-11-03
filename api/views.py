@@ -179,8 +179,6 @@ class UserList(generics.ListCreateAPIView):
                     new_user = CustomUser.objects.create(username=str(request.data['username']), email = str(request.data['email']), first_name = request.data['first_name'], last_name = request.data['last_name'])
                     new_user.set_password(str(request.data['password']))
                     new_user.save()
-                    devices = GCMDevice.objects.all()
-                    devices.send_message(CustomUserSerializer(new_user).data)
                     return Response(status=status.HTTP_200_OK, data={'id': new_user.id})
                 except:
                     pass
@@ -734,6 +732,12 @@ class AttributeByProfile(generics.ListCreateAPIView):
                     if attribute.name == request.data['name']:
                         attribute.value = request.data['value']
                         attribute.save()
+
+                        users_to_notify = []
+                        for p in profile.connections.all():
+                            users_to_notify += [p.user]
+                        devices = GCMDevice.objects.all().filter(user__in=users_to_notify)
+                        devices.send_message("Ivo is the swag!")
                         return Response(status=status.HTTP_200_OK, data=AttributeSerializer(attribute).data)
 
             return Response(status=status.HTTP_400_BAD_REQUEST)
