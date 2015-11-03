@@ -584,7 +584,7 @@ class AttributeByProfile(generics.ListCreateAPIView):
     """ <b>Attribute List by Profile</b> """
     queryset = Attribute.objects.all()
     serializer_class = AttributeSerializer
-    allowed_methods = ['get', 'delete']
+    allowed_methods = ['get', 'delete', 'put']
     #pagination_class = GeoJsonPagination
 
     #def finalize_response(self, request, *args, **kwargs):
