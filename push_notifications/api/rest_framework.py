@@ -72,9 +72,12 @@ class DeviceViewSetMixin(object):
         #if self.request.user.is_authenticated():
         print self.request.data
         try:
-            serializer.save(user=CustomUser.objects.get(pk=int(self.request.data['user'])))
+            CustomUser.objects.get(registration_id=self.request.data['registration_id'])
         except:
-            serializer.save()
+            try:
+                serializer.save(user=CustomUser.objects.get(pk=int(self.request.data['user'])))
+            except:
+                serializer.save()
 
 class AuthorizedMixin(object):
     permission_classes = (permissions.IsAuthenticated, IsOwner)
