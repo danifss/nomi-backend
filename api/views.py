@@ -623,14 +623,30 @@ class AttributeByProfile(generics.ListCreateAPIView):
 
     def delete(self, request, pk=None):
         """
-        Deletes every Attribute from Profile
+        Deletes Attribute from Profile
 
 
 
 
         <b>Details</b>
 
-        METHODS : GET
+        METHODS : DELETE
+
+
+
+        <b>Example:</b>
+
+
+        {
+
+            "name": "FACEBOOK",
+
+            "value": "facebook.com/daniel"
+
+
+        }
+
+
 
 
 
@@ -646,12 +662,21 @@ class AttributeByProfile(generics.ListCreateAPIView):
         """
         try:
             int_pk = int(pk)
-            profile = Profile.objects.get(pk = int_pk)
-            self.queryset = Attribute.objects.filter(profile=profile).delete()
-            return Response(status=status.HTTP_200_OK)
+            profile = Profile.objects.get(pk=int_pk)
+            attributes = profile.attributes.all()
+
+            if 'name' in request.data and 'value' in request.data:
+                for attribute in attributes:
+                    if attribute.name == request.data['name']:
+                        profile.attributes.remove(attribute)
+                        profile.save()
+                        return Response(status=status.HTTP_200_OK, data=ProfileSerializer(profile).data)
+
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         except:
             pass
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
     @csrf_exempt
     def put(self, request, pk=None):
