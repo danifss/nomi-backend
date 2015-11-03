@@ -569,12 +569,12 @@ class ProfilePost(generics.ListCreateAPIView):
             if 'name' in request.data and 'user' in request.data \
                     and 'color' in request.data:
 
-                Profile.objects.create(
+                profile = Profile.objects.create(
                     name=request.data['name'],
                     user=CustomUser.objects.get(pk=request.data['user']),
                     color=request.data['color']
                 )
-                return Response(status=status.HTTP_200_OK)
+                return Response(status=status.HTTP_200_OK, data = ProfileSerializer(profile).data)
 
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
