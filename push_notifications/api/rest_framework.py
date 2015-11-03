@@ -72,7 +72,7 @@ class DeviceViewSetMixin(object):
         #if self.request.user.is_authenticated():
         print self.request.data
         try:
-            CustomUser.objects.get(registration_id=self.request.data['registration_id'])
+            GCMDevice.objects.get(registration_id=self.request.data['registration_id'])
         except:
             try:
                 serializer.save(user=CustomUser.objects.get(pk=int(self.request.data['user'])))
