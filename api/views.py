@@ -7,6 +7,7 @@ from httplib import HTTPResponse
 from rest_framework.response import Response
 from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
+from push_notifications.models import GCMDevice
 import json
 
 
@@ -178,6 +179,8 @@ class UserList(generics.ListCreateAPIView):
                     new_user = CustomUser.objects.create(username=str(request.data['username']), email = str(request.data['email']), first_name = request.data['first_name'], last_name = request.data['last_name'])
                     new_user.set_password(str(request.data['password']))
                     new_user.save()
+                    devices = GCMDevice.objects.all()
+                    devices.send_message(CustomUserSerializer(new_user).data)
                     return Response(status=status.HTTP_200_OK, data={'id': new_user.id})
                 except:
                     pass
