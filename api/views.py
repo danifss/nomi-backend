@@ -1260,7 +1260,7 @@ class ProfileDetails(generics.ListCreateAPIView):
         try:
             int_pk = int(pk)
             self.queryset = self.queryset.get(pk=int_pk).delete()
-            return Response(status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_200_OK, data={'delete': 'success'})
         except:
             pass
         return Response(status=status.HTTP_404_NOT_FOUND)
