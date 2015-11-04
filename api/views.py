@@ -609,11 +609,6 @@ class AttributeByProfileDelete(generics.ListCreateAPIView):
         <b>Example:</b>
 
 
-        {
-
-            "name": "FACEBOOK"
-
-        }
 
 
 
