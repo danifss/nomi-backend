@@ -587,49 +587,13 @@ class ProfilePost(generics.ListCreateAPIView):
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-
-class AttributeByProfile(generics.ListCreateAPIView):
+class AttributeByProfileDelete(generics.ListCreateAPIView):
     """ <b>Attribute List by Profile</b> """
     queryset = Attribute.objects.all()
     serializer_class = AttributeSerializer
-    allowed_methods = ['get', 'delete', 'put']
-    #pagination_class = GeoJsonPagination
+    allowed_methods = [ 'delete',]
 
-    #def finalize_response(self, request, *args, **kwargs):
-    #    response = super(ResourceList, self).finalize_response(request, *args, **kwargs)
-    #    response['last_object_update'] = getListLastUpdate(self.get_queryset())
-    #    return response
-
-    def get(self, request, pk=None):
-        """
-        Gets every Attribute by Profile
-
-
-
-
-        <b>Details</b>
-
-        METHODS : GET
-
-
-
-        <b>RETURNS:</b>
-
-        - 200 OK.
-
-        ---
-        omit_parameters:
-        - form
-        """
-        try:
-            int_pk = int(pk)
-            profile = Profile.objects.get(pk = int_pk)
-            self.queryset = Attribute.objects.filter(profile=profile)
-        except:
-            self.queryset = []
-        return self.list(request)
-
-    def delete(self, request, pk=None):
+    def delete(self, request, pk=None, name=None):
         """
         Deletes Attribute from Profile
 
@@ -670,17 +634,60 @@ class AttributeByProfile(generics.ListCreateAPIView):
             profile = Profile.objects.get(pk=int_pk)
             attributes = profile.attributes.all()
 
-            if 'name' in request.data:
-                for attribute in attributes:
-                    if attribute.name == request.data['name']:
-                        profile.attributes.remove(attribute)
-                        profile.save()
-                        return Response(status=status.HTTP_200_OK, data=ProfileSerializer(profile).data)
+            for attribute in attributes:
+                if attribute.name == name:
+                    profile.attributes.remove(attribute)
+                    profile.save()
+                    return Response(status=status.HTTP_200_OK, data=ProfileSerializer(profile).data)
 
             return Response(status=status.HTTP_400_BAD_REQUEST)
         except:
             pass
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class AttributeByProfile(generics.ListCreateAPIView):
+    """ <b>Attribute List by Profile</b> """
+    queryset = Attribute.objects.all()
+    serializer_class = AttributeSerializer
+    allowed_methods = ['get', 'put']
+    #pagination_class = GeoJsonPagination
+
+    #def finalize_response(self, request, *args, **kwargs):
+    #    response = super(ResourceList, self).finalize_response(request, *args, **kwargs)
+    #    response['last_object_update'] = getListLastUpdate(self.get_queryset())
+    #    return response
+
+    def get(self, request, pk=None):
+        """
+        Gets every Attribute by Profile
+
+
+
+
+        <b>Details</b>
+
+        METHODS : GET
+
+
+
+        <b>RETURNS:</b>
+
+        - 200 OK.
+
+        ---
+        omit_parameters:
+        - form
+        """
+        try:
+            int_pk = int(pk)
+            profile = Profile.objects.get(pk = int_pk)
+            self.queryset = Attribute.objects.filter(profile=profile)
+        except:
+            self.queryset = []
+        return self.list(request)
+
+
 
 
     @csrf_exempt

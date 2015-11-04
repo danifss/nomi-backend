@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^attribute/(?P<pk>[0-9]+)/$', views.AttributeDetails.as_view()),
     url(r'^attribute/profile/$', views.AttributePost.as_view()),
     url(r'^attribute/profile/(?P<pk>[0-9]+)/$', views.AttributeByProfile.as_view()),
+    url(r'^attribute/profile/(?P<pk>[0-9]+)/(?P<name>.+)/$', views.AttributeByProfileDelete.as_view()),
     url(r'^profile/$', views.ProfileList.as_view()),
     url(r'^profile/(?P<pk>[0-9]+)$', views.ProfileDetails.as_view()),
     url(r'^profile/user/$', views.ProfilePost.as_view()),
