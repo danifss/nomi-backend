@@ -1,10 +1,12 @@
 from django.conf.urls import include, url
 from api import views
 from push_notifications.api.rest_framework import GCMDeviceViewSet
+from push_notifications.api.rest_framework import APNSDeviceViewSet
 
 
 urlpatterns = [
     url(r'^device/gcm/?$', GCMDeviceViewSet.as_view({'post': 'create'}), name='create_gcm_device'),
+    url(r'^device/apns/?$', APNSDeviceViewSet.as_view({'post': 'create'}), name='create_apns_device'),
 
     url(r'^docs/', include('rest_framework_swagger.urls')),
 
