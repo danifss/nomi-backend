@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
 from push_notifications.models import GCMDevice
+from push_notifications.models import APNSDevice
 import json
 
 
@@ -445,6 +446,8 @@ class AttributePost(generics.ListCreateAPIView):
                     users_to_notify += [p.user]
                 devices = GCMDevice.objects.all().filter(user__in=users_to_notify)
                 devices.send_message(ProfileSerializer(profile).data)
+                devices_ios = APNSDevice.objects.all().filter(user__in=users_to_notify)
+                devices_ios.send_message(ProfileSerializer(profile).data)
 
                 return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -586,6 +589,7 @@ class ProfilePost(generics.ListCreateAPIView):
 
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 class AttributeByProfileDelete(generics.ListCreateAPIView):
     """ <b>Attribute List by Profile</b> """
@@ -747,6 +751,8 @@ class AttributeByProfile(generics.ListCreateAPIView):
                             users_to_notify += [p.user]
                         devices = GCMDevice.objects.all().filter(user__in=users_to_notify)
                         devices.send_message(ProfileSerializer(profile).data)
+                        devices_ios = APNSDevice.objects.all().filter(user__in=users_to_notify)
+                        devices_ios.send_message(ProfileSerializer(profile).data)
                         return Response(status=status.HTTP_200_OK, data=AttributeSerializer(attribute).data)
 
             return Response(status=status.HTTP_400_BAD_REQUEST)

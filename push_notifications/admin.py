@@ -81,5 +81,5 @@ class GCMDeviceAdmin(DeviceAdmin):
 
     list_display = ("__unicode__", "device_id_hex", "user", "active", "date_created")
 
-
+admin.site.register(APNSDevice, DeviceAdmin)
 admin.site.register(GCMDevice, GCMDeviceAdmin)
