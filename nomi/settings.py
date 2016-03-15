@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = (
     # wpadmin must be before django.contrib.admin
-    'wpadmin',
+    # 'wpadmin',
     'rest_framework',
     'rest_framework_swagger',
     'push_notifications',
@@ -116,18 +116,18 @@ STATIC_URL = '/static/'
 
 # wpadmin settings
 
-WPADMIN = {
-    'admin': {
-        'title': 'nomi',
-        'menu': {
-            'left': 'nomi.wp.LeftMenu',
-        },
-        'dashboard': {
-            'breadcrumbs': True,
-        },
-        'custom_style': STATIC_URL + 'wpadmin/css/themes/light.css',
-    }
-}
+# WPADMIN = {
+#     'admin': {
+#         'title': 'nomi',
+#         'menu': {
+#             'left': 'nomi.wp.LeftMenu',
+#         },
+#         'dashboard': {
+#             'breadcrumbs': True,
+#         },
+#         'custom_style': STATIC_URL + 'wpadmin/css/themes/light.css',
+#     }
+# }
 
 
 # restframework pagination settings
